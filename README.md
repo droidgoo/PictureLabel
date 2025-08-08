@@ -59,8 +59,6 @@ Download the package and run the `install.sh` script. Run `untintall.sh` to remo
 
 May need to check the Dolphin context menu settings to enable [x] the menu in settings.
 
-
-
 License 
 
 GPL-3.0 
