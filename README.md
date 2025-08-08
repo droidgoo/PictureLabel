@@ -63,5 +63,5 @@ May need to check the Dolphin context menu settings to enable [x] the menu in se
 
 License 
 
-v3
+GPL-3.0 
 
