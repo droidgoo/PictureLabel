@@ -1,0 +1,25 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=image/*;inode/directory;
+Icon=folder-pictures-symbolic
+Actions=1labelFolder;2labelFile;3labelSettings;
+X-KDE-StartupNotify=false
+X-KDE-Submenu=Picture Label
+X-KDE-Priority=TopLevel
+
+
+[Desktop Action 1labelFolder]
+Icon=folder-pictures-symbolic
+Exec=PATH_HOLDER/PictureLabel/picture-label.sh %F/*;
+Name=Folder
+
+[Desktop Action 2labelFile]
+Icon=add-subtitle.svg
+Exec=PATH_HOLDER/PictureLabel/picture-label.sh %f;
+Name=Image
+
+[Desktop Action 3labelSettings]
+Icon=configure.svg
+Exec=PATH_HOLDER/PictureLabel/settings.sh;
+Name=Settings
