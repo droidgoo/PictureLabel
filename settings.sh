@@ -1,6 +1,13 @@
 #!/bin/bash
 
+#####################################
+# Picture Label dolphin servicemenu #
+# settings.sh v0.1                  #
+#####################################
+
 smd=PATH_HOLDER/PictureLabel/
+
+clear
 
 echo :::::::::::::::::::
 echo   CHANGE SETTINGS
@@ -28,6 +35,7 @@ for s in "${top[@]}"; do
     case $s in
         1)  echo edit save directory
             sdir=$(awk -F\" 'NR==1{print $2}' $smd/setdb.txt)
+            wdir=$(awk -F\" 'NR==2{print $2}' $smd/setdb.txt)
             if [ $sdir == '$HOME' ]; then
                 sdir=$HOME
             fi
@@ -36,9 +44,15 @@ for s in "${top[@]}"; do
                 continue
             fi
             echo write directory to db
+            # enforce that data and save directories are different
+            if [ $sdir == $wdir ]; then
+                kdialog --error "Save and Working directories cannot be the same<br>Save reset to $HOME" --title "Error!"
+                sdir=$HOME
+            fi
             awk -i inplace -v set="$sdir" 'BEGIN{FS=OFS="\""} NR==1{$2=set} {print}' $smd/setdb.txt
         ;;
         2)  echo edit working directory
+            sdir=$(awk -F\" 'NR==1{print $2}' $smd/setdb.txt)
             wdir=$(awk -F\" 'NR==2{print $2}' $smd/setdb.txt)
             if [ $wdir == '$HOME' ]; then
                 wdir=$HOME
@@ -48,6 +62,11 @@ for s in "${top[@]}"; do
                 continue
             fi
             echo write directory to db
+            # enforce that data and save directories are different
+            if [ $sdir == $wdir ]; then
+                kdialog --error "Save and Working directories cannot be the same<br>Working reset to $HOME" --title "Error!"
+                wdir=$HOME
+            fi
             awk -i inplace -v set="$wdir" 'BEGIN{FS=OFS="\""} NR==2{$2=set} {print}' $smd/setdb.txt
         ;;
         3)  echo set font selection

@@ -1,15 +1,22 @@
 #!/bin/bash
 
+#####################################
+# Picture Label dolphin servicemenu #
+# picture-label.sh v0.1             #
+#####################################
+
 smd=PATH_HOLDER/PictureLabel/
+
+clear
+
+# import settings
+source $smd/setdb.txt
 
 prev="
 Accept
   - or -
  Redo
 "
-# import settings
-source $smd/setdb.txt
-clear
 
 # test for imagemagick version and prepend appropriate command ahead of each imagemagick call
 if [ $(convert -version | grep Version: | sed -E 's/^[^0-9]*([0-9]).*$/\1/') -eq 6 ] ; then
@@ -37,7 +44,12 @@ for files in $(file -i ${see[@]} | grep image | sed -e "s/:.*$//"); do          
     e=${b/#$n/}
 
     # set up pristine picture files for labeling
-    echo $mgk ; convert $files  $data_dir/$n.png
+    # save steps if original is already in .png format
+    if [ $e == ".png" ]; then
+        cp $files $data_dir/$n.png
+    else
+        echo $mgk ; convert $files  $data_dir/$n.png
+    fi
     cp $data_dir/$n.png $save_dir/$n.png
 
     # set up data file if does not exist
@@ -313,12 +325,18 @@ for files in $(file -i ${see[@]} | grep image | sed -e "s/:.*$//"); do          
                 ((i++))
             done
 
-            # save modified picture in output directory under the original image type
-            echo $mgk ; convert $data_dir/$n.png $save_dir/$n$e
-
+            # save steps if original is already in .png format
+            # save modified picture to output directory under the original image type
             # clean up working files and display
+            if [ $e == ".png" ]; then
+                echo final output does not need conversion to .png
+            else
+                echo converting final output to original format
+                echo $mgk ; convert $data_dir/$n.png $save_dir/$n$e
+                rm $data_dir/$n.png
+                rm $save_dir/$n.png
+            fi
             rm $data_dir/$n.png
-            rm $save_dir/$n.png
             kill $dpic          # [[[kill]]] pic in-work  done with labeling
 
             # record active label locations
@@ -337,7 +355,12 @@ for files in $(file -i ${see[@]} | grep image | sed -e "s/:.*$//"); do          
         kill $dpic              # [[[kill]]] pic in-work
 
         # set up pristine picture files for labeling
-        echo $mgk ; convert $files  $data_dir/$n.png
+        # save steps if original is already in .png format
+        if [ $e == ".png" ]; then
+            cp $files $data_dir/$n.png
+        else
+            echo $mgk ; convert $files  $data_dir/$n.png
+        fi
         cp $data_dir/$n.png $save_dir/$n.png
 
         echo ::::::::::::::::
